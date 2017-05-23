@@ -25,7 +25,7 @@ var initChildProcess = function()
 	child.on('close', function(code) {
 		if(!mainProcessShutdown)
 		{
-			initChildProcess();
+			process.nextTick(initChildProcess);
 		}
 	});
 };
