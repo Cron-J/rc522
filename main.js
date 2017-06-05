@@ -12,7 +12,7 @@ var mainProcessShutdown = false;
 
 var initChildProcess = function()
 {
-	child = spawn("node", [__dirname + "/" + "rc522_output.js"]);
+	child = spawn("node", [__dirname + "/" + "rc522_output.js"], { stdio: ['pipe', 'pipe', process.stderr] });
 	var linereader = readline.createInterface(child.stdout, child.stdin);
 
 	linereader.on('line', function (rfidTagSerialNumber) {
@@ -27,6 +27,10 @@ var initChildProcess = function()
 		{
 			process.nextTick(initChildProcess);
 		}
+	});
+
+	child.on('error', function(err) {
+		console.log("Error with RC522 subprocess", err);
 	});
 };
 
